@@ -125,13 +125,3 @@ dmypy.json
 
 # Pyre type checker
 .pyre/
-
-# custom
-migrations/
-aerich.ini
-.pdm.toml
-src/core/init_example.py
-example_data/
-tests/
-.vscode/
-scripts/
