@@ -1,4 +1,4 @@
-from rectangle import Rectangle
+from packer.rectangle import Rectangle
 from itertools import count
 from operator import add, sub
 
@@ -32,6 +32,8 @@ class Cargo(Rectangle):
         super().__init__(length, width, height, weight, x=x, y=y, admittance=admittance)
         if name is None:
             self.name = next(cargo_name_generator)
+        else:
+            self.name = name
 
     @property
     def weight_per_area(self) -> float:
@@ -40,21 +42,21 @@ class Cargo(Rectangle):
     def rotate(self) -> None:
         self.x, self.y = self.y, self.x
 
-    def intersects_with_admittance(self, rect: "Rectangle", edges: bool = True) -> bool:
-        if edges:
-            result = (
-                self.bottom_with_admittance > rect.top_with_admittance
-                or self.top_with_admittance < rect.bottom_with_admittance
-            ) and (
-                self.left_with_admittance > rect.right_with_admittance
-                or self.right_with_admittance < rect.left_with_admittance
-            )
-        else:
-            result = (
-                self.bottom_with_admittance >= rect.top_with_admittance
-                or self.top_with_admittance <= rect.bottom_with_admittance
-            ) and (
-                self.left_with_admittance >= rect.right_with_admittance
-                or self.right_with_admittance <= rect.left_with_admittance
-            )
-        return result
+    # def intersects_with_admittance(self, rect: "Rectangle", edges: bool = True) -> bool:
+    #     if edges:
+    #         result = (
+    #             self.bottom_with_admittance > rect.top_with_admittance
+    #             or self.top_with_admittance < rect.bottom_with_admittance
+    #         ) and (
+    #             self.left_with_admittance > rect.right_with_admittance
+    #             or self.right_with_admittance < rect.left_with_admittance
+    #         )
+    #     else:
+    #         result = (
+    #             self.bottom_with_admittance >= rect.top_with_admittance
+    #             or self.top_with_admittance <= rect.bottom_with_admittance
+    #         ) and (
+    #             self.left_with_admittance >= rect.right_with_admittance
+    #             or self.right_with_admittance <= rect.left_with_admittance
+    #         )
+    #     return result

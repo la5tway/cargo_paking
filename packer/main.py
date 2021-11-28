@@ -1,58 +1,26 @@
-from PIL import Image, ImageColor, ImageDraw, ImageFont
-
 from cargo import Cargo
-from kuzov import Kuzov
-from scheduler import Scheduler
+from container import Container
+from packer import render_img
 
 if __name__ == "__main__":
-    kuzov = Kuzov(
+    container = Container(
         *(
             int(i)
             for i in input(
-                "Введите характеристики кузова через пробел в порядке:\nдлина (мм), ширина (мм), высота (мм), грузоподъёмность (мм): "
+                "Введите характеристики кузова через пробел в порядке:\nдлина (мм), ширина (мм), высота (мм), грузоподъёмность (кг): "
             ).split()
         )
     )
-    qty_cargo = int(input("Введите количество грузов в штуках: "))
+    qty_cargo = int(input("Введите количество груза в штуках: "))
     cargo_set = []
     for _ in range(qty_cargo):
         cargo = input(
-            "Введите характеристики груза через пробел в порядке:\nдлина (мм), ширина (мм), высота (мм), вес (мм), наименование (не обязательно): "
+            "Введите характеристики груза через пробел в порядке:\nдлина (мм), ширина (мм), высота (мм), вес (кг), наименование (не обязательно): "
         ).split()
         if len(cargo) > 4:
             cargo = Cargo(*[int(i) for i in cargo[:4]], cargo[4])
         else:
             cargo = Cargo(*[int(i) for i in cargo])
         cargo_set.append(cargo)
-    unfit_cargo_set = []
-    for cargo in cargo_set:
-        if not kuzov.fitness(cargo):
-            unfit_cargo_set.append(cargo)
-            cargo_set.remove(cargo)
-    scheduler = Scheduler(kuzov)
-    scheduler.add_cargo_set(cargo_set)
-
-    fnt = ImageFont.truetype("arial.ttf", 100)
-
-    image = Image.new(
-        "RGB", (kuzov.length + 50, kuzov.width + 50), color=ImageColor.getrgb("white")
-    )
-    draw = ImageDraw.Draw(image)
-    draw.rectangle(
-        (kuzov.point_bot_l, kuzov.point_top_r), outline=ImageColor.getrgb("black")
-    )
-    for c in scheduler.cargo_set:
-        draw.rectangle(
-            (c.point_bot_l, c.point_top_r),
-            fill=ImageColor.getrgb("green"),
-            outline=ImageColor.getrgb("red"),
-        )
-        draw.multiline_text(
-            c.point_bot_l,
-            f"{c.name}\n{c.weight}",
-            font=fnt,
-            fill=ImageColor.getrgb("black"),
-        )
-    image.save("empty.png", "PNG")
-    image.show()
+    render_img(container, cargo_set, rotate=True)
     input("Нажмите Enter чтобы выйти ")
