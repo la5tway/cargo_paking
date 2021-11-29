@@ -1,5 +1,5 @@
 import pytest
-from packer import Container, Cargo
+from packer import Cargo, Container
 
 
 def pallet(height: int, weight: int) -> Cargo:
@@ -24,9 +24,9 @@ def gazelle() -> Container:
 @pytest.fixture()
 def fit_set_to_gazelle():
     return [
-        # pallet(1500, 660),
-        # pallet(1500, 950),
-        # pallet(1500, 1200),
+        pallet(1500, 660),
+        pallet(1500, 950),
+        pallet(1500, 1200),
         pallet(500, 200),
         pallet(500, 200),
         pallet(500, 300),

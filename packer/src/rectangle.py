@@ -1,5 +1,5 @@
 from operator import add, sub
-from typing import Tuple
+from typing import List, Tuple
 
 
 class Rectangle:
@@ -49,15 +49,15 @@ class Rectangle:
 
     @property
     def length_with_admittance(self) -> int:
-        return self.om(self.length, self.admittance)
+        return self.om(self.length, self.admittance)  # type: ignore
 
     @property
     def width_with_admittance(self) -> int:
-        return self.om(self.width, self.admittance)
+        return self.om(self.width, self.admittance)  # type: ignore
 
     @property
     def height_with_admittance(self) -> int:
-        return self.om(self.height, self.admittance)
+        return self.om(self.height, self.admittance)  # type: ignore
 
     @property
     def bottom(self) -> int:
@@ -65,7 +65,7 @@ class Rectangle:
 
     @property
     def bottom_with_admittance(self) -> int:
-        return self.op(self.y, self.admittance)
+        return self.op(self.y, self.admittance)  # type: ignore
 
     @property
     def top(self) -> int:
@@ -73,7 +73,7 @@ class Rectangle:
 
     @property
     def top_with_admittance(self) -> int:
-        return self.om(self.top, self.admittance)
+        return self.om(self.top, self.admittance)  # type: ignore
 
     @property
     def left(self) -> int:
@@ -81,7 +81,7 @@ class Rectangle:
 
     @property
     def left_with_admittance(self) -> int:
-        return self.op(self.x, self.admittance)
+        return self.op(self.x, self.admittance)  # type: ignore
 
     @property
     def right(self) -> int:
@@ -89,7 +89,7 @@ class Rectangle:
 
     @property
     def right_with_admittance(self) -> int:
-        return self.om(self.right, self.admittance)
+        return self.om(self.right, self.admittance)  # type: ignore
 
     @property
     def point_top_l(self) -> Tuple[int, ...]:
@@ -127,10 +127,6 @@ class Rectangle:
             and rect.right_with_admittance <= self.right_with_admittance
         )
 
-    # def intersects(self, rect: "Rectangle") -> bool:
-    #     return (self.bottom >= rect.top or self.top <= rect.bottom) and (
-    #         self.left >= rect.right or self.right <= rect.left
-    #     )
     def intersects(self, rect: "Rectangle") -> bool:
         if (
             self.bottom >= rect.top
@@ -141,14 +137,6 @@ class Rectangle:
             return False
         return True
 
-    # def intersects_with_admittance(self, rect: "Rectangle") -> bool:
-    #     result = (
-    #         self.bottom_with_admittance <= rect.bottom_with_admittance
-    #         or self.top_with_admittance >= rect.top_with_admittance
-    #         or self.left_with_admittance <= rect.left_with_admittance
-    #         or self.right_with_admittance >= rect.right_with_admittance
-    #     )
-    #     return result
     def intersects_with_admittance(self, rect: "Rectangle") -> bool:
         if (
             self.bottom_with_admittance >= rect.top_with_admittance
@@ -185,8 +173,8 @@ class Rectangle:
 
     def fitness_set(
         self,
-        rect_set: list["Rectangle"]
-    ) -> tuple[list["Rectangle"], ...]:
+        rect_set: List["Rectangle"]
+    ) -> Tuple[List["Rectangle"], ...]:
         fit_set, unfit_set = [], []
         for rect in rect_set:
             if self.fitness(rect):

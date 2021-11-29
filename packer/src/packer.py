@@ -1,10 +1,10 @@
 import itertools
 from copy import deepcopy
 from itertools import chain
-from typing import List, Tuple, Union
+from typing import List, Optional, Tuple, Union
 
-from packer.cargo import Cargo
-from packer.container import Container
+from .cargo import Cargo
+from .container import Container
 
 
 class Packer:
@@ -15,8 +15,8 @@ class Packer:
     ) -> None:
         self.container = deepcopy(container)
         self.rotate = rotate
-        self.cargo_set: list[Cargo] = []
-        self.unfit_cargo_set: list[Cargo] = []
+        self.cargo_set: List[Cargo] = []
+        self.unfit_cargo_set: List[Cargo] = []
         self._max_container_set = [deepcopy(container)]
 
     def used_area(self) -> float:
@@ -37,7 +37,7 @@ class Packer:
                 if self.cargo_set[c1].intersects_with_admittance(self.cargo_set[c2]):
                     raise Exception("Cargo collision detected")
 
-    def _cargo_fitness(self, max_container: Container, cargo: Cargo):
+    def _cargo_fitness(self, max_container: Container, cargo: Cargo) -> Optional[int]:
         if max_container._two_side_fitness(cargo):
             if cargo.weight <= self.container.weight_left:
                 return max_container.left
@@ -72,13 +72,15 @@ class Packer:
             return None, None
         cargo.move(
             max_container.left_with_admittance + cargo.admittance,
-            max_container.bottom_with_admittance + cargo.admittance
+            max_container.bottom_with_admittance + cargo.admittance,
         )
         if max_container.contains_with_admittance(cargo):
             return cargo, max_container
         return None, None
 
-    def _split_container(self, max_container: Container, cargo: Cargo) -> List[Container]:
+    def _split_container(
+        self, max_container: Container, cargo: Cargo
+    ) -> List[Container]:
         max_container_set = []
 
         if cargo.left_with_admittance > max_container.left_with_admittance:
