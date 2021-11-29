@@ -1,6 +1,6 @@
 from datetime import datetime as dt
 from pathlib import Path
-from typing import List
+from typing import List, Tuple
 
 from PIL import Image, ImageColor, ImageDraw, ImageFont
 
@@ -18,7 +18,7 @@ def render_img(
     cargo_set: List[Cargo],
     save: bool = True,
     rotate: bool = False,
-):
+) -> Tuple[Packer, List[Cargo]]:
     fit_set, unfit_set = container.fitness_set(cargo_set)  # type: ignore
     packer = Packer(container, rotate)
     packer.add_cargo_set(fit_set)  # type: ignore
@@ -55,11 +55,6 @@ def render_img(
     if save:
         image.save(f"{OUTPUT_DIR}/{dt.now():%y%m%d_%H%M%S}.png", "PNG")
 
-    unfit_set += packer.unfit_cargo_set
-
-    if len(unfit_set) > 0:
-        print("Не уместившийся груз:")
-        for c in unfit_set:
-            print(f"- {c.name}")  # type: ignore
-
     image.show()
+
+    return packer, unfit_set

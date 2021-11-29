@@ -22,6 +22,12 @@ class Packer:
     def used_area(self) -> float:
         return sum(cargo.area_with_admittance for cargo in self.cargo_set)
 
+    def used_area_m2(self) -> float:
+        return self.used_area() / 1_000_000
+
+    def used_weight(self) -> float:
+        return sum(cargo.weight for cargo in self.cargo_set)
+
     def validate_packing(self):
         container = deepcopy(self.container)
         len_cargo_set = len(self.cargo_set)

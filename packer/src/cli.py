@@ -23,5 +23,13 @@ def cli() -> None:
         else:
             cargo = Cargo(*[int(i) for i in cargo])
         cargo_set.append(cargo)
-    render_img(container, cargo_set, rotate=True)
+    packer, unfit_set = render_img(container, cargo_set, rotate=True)
+    print(f"Всего упаковано грузов: {len(packer.cargo_set)} шт.")
+    print(f"Вес упакованных грузов: {packer.used_weight()} кг")
+    print(f"Занятая площадь: {packer.used_area_m2()} м2")
+    unfit_set += packer.unfit_cargo_set
+    if len(unfit_set) > 0:
+        print("Не уместившийся груз:")
+        for cargo in unfit_set:
+            print(f"- {cargo.name} ({cargo})")
     input("Нажмите Enter чтобы выйти ")
